@@ -13,12 +13,14 @@ import SidePanel from '../components/Side-Panel';
 import Output from '../components/Output';
 import CompletionModal from '../components/CompletionModal';
 import HelpModal from '../components/HelpModal';
+import VideoModal from '../components/VideoModal';
 import ResetModal from '../components/ResetModal';
 
 import { randomCompliment } from '../utils/get-words';
-
+import { createGuideUrl } from '../utils';
 import { challengeTypes } from '../../../../utils/challengeTypes';
 import { ChallengeNode } from '../../../redux/propTypes';
+import { dasherize } from '../../../../utils';
 import {
   createFiles,
   challengeFilesSelector,
@@ -31,6 +33,8 @@ import {
 } from '../redux';
 
 import './classic.css';
+
+import decodeHTMLEntities from '../../../../utils/decodeHTMLEntities';
 
 const mapStateToProps = createSelector(
   challengeFilesSelector,
@@ -158,10 +162,10 @@ class ShowClassic extends PureComponent {
       data: {
         challengeNode: {
           challengeType,
-          fields: { blockName },
+          fields: { blockName, slug },
           title,
           description,
-          guideUrl
+          videoUrl
         }
       },
       files,
@@ -200,7 +204,7 @@ class ShowClassic extends PureComponent {
 * Your test output will go here.
 */
 `}
-                output={output}
+                output={decodeHTMLEntities(output)}
               />
             </ReflexElement>
           ) : null}
@@ -209,7 +213,7 @@ class ShowClassic extends PureComponent {
     const showPreview =
       challengeType === challengeTypes.html ||
       challengeType === challengeTypes.modern;
-    const blockNameTitle = `${blockName} - ${title}`;
+    const blockNameTitle = `${blockName}: ${title}`;
     return (
       <Fragment>
         <Helmet title={`${blockNameTitle} | Learn freeCodeCamp`} />
@@ -218,15 +222,19 @@ class ShowClassic extends PureComponent {
             <SidePanel
               className='full-height'
               description={description}
-              guideUrl={guideUrl}
+              guideUrl={createGuideUrl(slug)}
+              section={dasherize(blockName)}
               title={blockNameTitle}
+              videoUrl={videoUrl}
             />
           </ReflexElement>
           <ReflexSplitter propagate={true} {...this.resizeProps} />
           <ReflexElement flex={1} {...this.resizeProps}>
             {editors}
           </ReflexElement>
-          <ReflexSplitter propagate={true} {...this.resizeProps} />
+          {showPreview && (
+            <ReflexSplitter propagate={true} {...this.resizeProps} />
+          )}
           {showPreview ? (
             <ReflexElement flex={0.7} {...this.resizeProps}>
               <Preview
@@ -239,6 +247,7 @@ class ShowClassic extends PureComponent {
 
         <CompletionModal />
         <HelpModal />
+        <VideoModal videoUrl={videoUrl}/>
         <ResetModal />
       </Fragment>
     );
@@ -254,10 +263,11 @@ export const query = graphql`
   query ClassicChallenge($slug: String!) {
     challengeNode(fields: { slug: { eq: $slug } }) {
       title
-      guideUrl
       description
       challengeType
+      videoUrl
       fields {
+        slug
         blockName
         tests {
           text

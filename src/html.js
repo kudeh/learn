@@ -50,11 +50,13 @@ function HTML(props) {
       <body {...bodyAttributes}>
         {preBodyComponents}
         <div
+          className='tex2jax_ignore'
           dangerouslySetInnerHTML={{ __html: body }}
           id='___gatsby'
           key={'body'}
         />
         {postBodyComponents}
+        <script async={true} id='stripe-js' src='https://js.stripe.com/v3/' />
       </body>
     </html>
   );

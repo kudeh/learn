@@ -92,9 +92,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@freecodecamp/curriculum@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@freecodecamp/curriculum/-/curriculum-1.0.4.tgz#0f7d1c9a9f733593233a968a7f21d189edd51fa5"
+"@freecodecamp/curriculum@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@freecodecamp/curriculum/-/curriculum-3.2.1.tgz#9a487ff7175d15081d53f14aa400e0de13bd86f1"
 
 "@sinonjs/formatio@^2.0.0":
   version "2.0.0"
@@ -2735,6 +2735,10 @@ data-urls@^1.0.0:
     abab "^1.0.4"
     whatwg-mimetype "^2.0.0"
     whatwg-url "^6.4.0"
+
+date-fns@^1.29.0:
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -8820,6 +8824,12 @@ react-spinkit@^3.0.0:
     object-assign "^4.1.0"
     prop-types "^15.5.8"
 
+react-stripe-elements@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-2.0.0.tgz#5bfd881ad13e18a3255eff49f63ababf3861d216"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.3.1:
   version "16.3.1"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.1.tgz#d9257936d8535bd40f57f3d5a84e7b0452fb17f2"
@@ -11105,9 +11115,9 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-validator@^9.4.1:
-  version "9.4.1"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-9.4.1.tgz#abf466d398b561cd243050112c6ff1de6cc12663"
+validator@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.3.0.tgz#157a8c0981858cff381f59aabcdb8f83b57317cc"
 
 value-equal@^0.4.0:
   version "0.4.0"

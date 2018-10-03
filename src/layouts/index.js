@@ -7,12 +7,14 @@ import Helmet from 'react-helmet';
 import ga from '../analytics';
 
 import Header from '../components/Header';
-import { fetchUser } from '../redux/app';
+import DonationModal from '../components/Donation';
+import { fetchUser, userSelector } from '../redux/app';
 
 import 'prismjs/themes/prism.css';
 import 'react-reflex/styles.css';
 import './global.css';
 import './layout.css';
+import { createSelector } from 'reselect';
 
 const metaKeywords = [
   'javascript',
@@ -38,13 +40,17 @@ const metaKeywords = [
   'programming'
 ];
 
-const mapStateToProps = () => ({});
+const mapStateToProps = createSelector(
+  userSelector,
+  ({ theme = 'default' }) => ({ theme })
+);
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ fetchUser }, dispatch);
 
 const propTypes = {
   children: PropTypes.func,
-  fetchUser: PropTypes.func.isRequired
+  fetchUser: PropTypes.func.isRequired,
+  theme: PropTypes.string
 };
 
 class Layout extends PureComponent {
@@ -75,7 +81,7 @@ class Layout extends PureComponent {
     }
   }
   render() {
-    const { children } = this.props;
+    const { children, theme } = this.props;
     return (
       <Fragment>
         <Helmet
@@ -90,9 +96,10 @@ class Layout extends PureComponent {
           ]}
         />
         <Header />
-        <div className='app-wrapper'>
+        <div className={'app-wrapper ' + theme}>
           <main>{children()}</main>
         </div>
+        <DonationModal />
       </Fragment>
     );
   }

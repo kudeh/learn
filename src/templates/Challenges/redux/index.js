@@ -26,6 +26,7 @@ const initialState = {
   modal: {
     completion: false,
     help: false,
+    video: false,
     reset: false
   },
   projectFormVaules: {},
@@ -48,6 +49,7 @@ export const types = createTypes(
     'createQuestion',
     'initTests',
     'initConsole',
+    'initLogs',
     'updateConsole',
     'updateChallengeMeta',
     'updateFile',
@@ -55,6 +57,9 @@ export const types = createTypes(
     'updateProjectFormValues',
     'updateSuccessMessage',
     'updateTests',
+    'updateLogs',
+
+    'logsToConsole',
 
     'lockCode',
     'unlockCode',
@@ -95,24 +100,22 @@ export const initTests = createAction(types.initTests);
 export const updateTests = createAction(types.updateTests);
 
 export const initConsole = createAction(types.initConsole);
+export const initLogs = createAction(types.initLogs);
 export const updateChallengeMeta = createAction(types.updateChallengeMeta);
 export const updateFile = createAction(types.updateFile);
 export const updateConsole = createAction(types.updateConsole);
+export const updateLogs = createAction(types.updateLogs);
 export const updateJSEnabled = createAction(types.updateJSEnabled);
 export const updateProjectFormValues = createAction(
   types.updateProjectFormValues
 );
 export const updateSuccessMessage = createAction(types.updateSuccessMessage);
 
+export const logsToConsole = createAction(types.logsToConsole);
+
 export const lockCode = createAction(types.lockCode);
 export const unlockCode = createAction(types.unlockCode);
-export const disableJSOnError = createAction(
-  types.disableJSOnError,
-  ({ payload }) => {
-    console.error(JSON.stringify(payload));
-    return null;
-  }
-);
+export const disableJSOnError = createAction(types.disableJSOnError);
 export const storedCodeFound = createAction(types.storedCodeFound);
 export const noStoredCodeFound = createAction(types.noStoredCodeFound);
 
@@ -134,6 +137,7 @@ export const isCodeLockedSelector = state => state[ns].isCodeLocked;
 export const isCompletionModalOpenSelector = state =>
   state[ns].modal.completion;
 export const isHelpModalOpenSelector = state => state[ns].modal.help;
+export const isVideoModalOpenSelector = state => state[ns].modal.video;
 export const isResetModalOpenSelector = state => state[ns].modal.reset;
 export const isJSEnabledSelector = state => state[ns].isJSEnabled;
 export const successMessageSelector = state => state[ns].successMessage;
@@ -180,7 +184,22 @@ export const reducer = handleActions(
       ...state,
       consoleOut: state.consoleOut + '\n' + payload
     }),
-
+    [types.initLogs]: state => ({
+      ...state,
+      logsOut: []
+    }),
+    [types.updateLogs]: (state, { payload }) => ({
+      ...state,
+      logsOut: [...state.logsOut, payload]
+    }),
+    [types.logsToConsole]: (state, { payload }) => ({
+      ...state,
+      consoleOut:
+        state.consoleOut +
+        (state.logsOut.length
+          ? '\n' + payload + '\n' + state.logsOut.join('\n')
+          : '')
+    }),
     [types.updateChallengeMeta]: (state, { payload }) => ({
       ...state,
       challengeMeta: { ...payload }
@@ -222,8 +241,9 @@ export const reducer = handleActions(
       isJSEnabled: true,
       isCodeLocked: false
     }),
-    [types.disableJSOnError]: state => ({
+    [types.disableJSOnError]: (state, { payload }) => ({
       ...state,
+      consoleOut: state.consoleOut + '\n' + payload,
       isJSEnabled: false
     }),
 
